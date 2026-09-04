@@ -1,5 +1,7 @@
 # Hobby OS
 
+![image](doc/image.png)
+
 Yes, I'm doing what (I think) practically every low-level programmer has done before, building an OS.  
 I'm mainly doing this because a lot of great principles programming come from OS'.  
 So, it is practically a learning exercise.
