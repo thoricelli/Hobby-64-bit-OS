@@ -1,16 +1,29 @@
 ENTRY(_start)
 
+/* https://wiki.osdev.org/Linker_Scripts */
 SECTIONS
 {
     . = 1M;
 
-    .boot :
+    .text ALIGN(CONSTANT(MAXPAGESIZE)) :
     {
-        KEEP(*(.multiboot))
+        *(.multiboot)
+        *(.text)
     }
 
-    .text :
+    .rodata ALIGN(CONSTANT(MAXPAGESIZE)) :
     {
-        *(.text)
+        *(.rodata)
+    }
+
+    .data ALIGN(CONSTANT(MAXPAGESIZE)) :
+    {
+        *(.data)
+    }
+
+    .bss ALIGN(CONSTANT(MAXPAGESIZE)) :
+    {
+        *(COMMON)
+        *(.bss*)
     }
 }
