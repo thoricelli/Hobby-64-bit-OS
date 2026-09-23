@@ -1,11 +1,8 @@
 #include "vga.hpp"
 
-static size_t vga_pos = 0;
-static uint8_t vga_color;
-
 void VGA::set(enum vga_color fg, enum vga_color bg)
 {
-    vga_color = (uint16_t)(fg | bg << 4);
+    VGA::vgaColor = (uint16_t)(fg | bg << 4);
 }
 
 void VGA::writeline(char *str)
@@ -14,9 +11,9 @@ void VGA::writeline(char *str)
 
     for (uint32_t i = 0; str[i] != '\0'; i++)
     {
-        vga_text_buffer[vga_pos] = (uint16_t)str[i] | (vga_color << 8);
-        vga_pos++;
+        vga_text_buffer[VGA::vgaPos] = (uint16_t)str[i] | (VGA::vgaColor << 8);
+        VGA::vgaPos++;
     }
 
-    vga_pos += VGA_CHARACTERS_PER_LINE - (vga_pos % VGA_CHARACTERS_PER_LINE);
+    VGA::vgaPos += VGA_CHARACTERS_PER_LINE - (VGA::vgaPos % VGA_CHARACTERS_PER_LINE);
 }

@@ -29,6 +29,10 @@ enum vga_color
 
 class VGA
 {
+private:
+    inline static size_t vgaPos = 0;
+    inline static uint8_t vgaColor;
+
 public:
     static void set(enum vga_color fg, enum vga_color bg);
     static void writeline(char *str);
