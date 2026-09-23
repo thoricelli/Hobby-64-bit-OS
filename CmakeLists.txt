@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(hobby_os LANGUAGES C ASM_NASM)
+project(hobby_os LANGUAGES CXX ASM_NASM)
 
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
 set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -g -F dwarf")
@@ -13,8 +13,8 @@ set(
     src/multiboot2/main.asm
     src/multiboot2/main64.asm
 
-    src/main.c
-    src/vga.c
+    src/main.cpp
+    src/vga.cpp
 )
 
 add_executable(hobby_os ${SOURCES})
@@ -22,11 +22,12 @@ add_executable(hobby_os ${SOURCES})
 target_include_directories(hobby_os PRIVATE include)
 
 set_target_properties(hobby_os PROPERTIES 
-    LINKER_LANGUAGE C
+    LINKER_LANGUAGE CXX
     LINK_DEPENDS ${CMAKE_SOURCE_DIR}/linker.ld
 )
 
 target_compile_options(hobby_os PRIVATE
+    $<$<COMPILE_LANGUAGE:CXX>:-ffreestanding -fno-exceptions -fno-rtti -Wall -Wextra -g>
     $<$<COMPILE_LANGUAGE:C>:-ffreestanding -Wall -Wextra -g>
     $<$<COMPILE_LANGUAGE:ASM_NASM>:-g -F dwarf>
 )

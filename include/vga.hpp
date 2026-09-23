@@ -27,5 +27,9 @@ enum vga_color
     VGA_COLOR_WHITE = 15,
 };
 
-void vga_set(enum vga_color fg, enum vga_color bg);
-void vga_writeline(char *str);
+class VGA
+{
+public:
+    static void set(enum vga_color fg, enum vga_color bg);
+    static void writeline(char *str);
+};
