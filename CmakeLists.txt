@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(hobby_os LANGUAGES CXX ASM_NASM)
-
-set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
-set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -g -F dwarf")
+project(hobby_os LANGUAGES C CXX ASM_NASM)
 
 set(ISO_DIR ${CMAKE_BINARY_DIR}/isodir)
 set(GRUB_CFG ${CMAKE_SOURCE_DIR}/grub.cfg)
@@ -13,8 +10,10 @@ set(
     src/multiboot2/main.asm
     src/multiboot2/main64.asm
 
+    src/runtime/string.c
+    src/hardware/vga/vga-text.cpp
+    
     src/main.cpp
-    src/vga.cpp
 )
 
 add_executable(hobby_os ${SOURCES})
