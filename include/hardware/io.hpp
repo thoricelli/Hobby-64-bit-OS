@@ -16,11 +16,6 @@ public:
      * Requests a byte value from the specified I/O port.
      */
     inline static uint8_t InB(uint16_t port);
-    /**
-     * I/O wait.
-     * https://wiki.osdev.org/Inline_Assembly/Examples#IO_WAIT
-     */
-    inline static void Wait();
 };
 
 #include "hardware/io.inl"
