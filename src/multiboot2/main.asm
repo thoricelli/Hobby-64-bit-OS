@@ -4,10 +4,12 @@ bits 32
 MULTIBOOT2_CHECKSUM equ 0x36d76289
 
 ; VGA
+; 
 VGA_MEMORY equ 0xb8000
 VGA_RED equ 0x0C
 
 ; CPUID
+; https://en.wikipedia.org/wiki/CPUID#EAX=8000'0000h:_Highest_Extended_Function_Implemented
 CPUID_HIGHEST_EXTENDED_FUNCTION_IMPLEMENTED equ 0x80000000
 CPUID_EXTENDED_PROCESSOR_INFO equ CPUID_HIGHEST_EXTENDED_FUNCTION_IMPLEMENTED + 1
 
@@ -55,9 +57,10 @@ extern long_mode_main
 section .text
 _start:
     mov esp, stack_top ; Set up 16 KiB of stack space before going into C.
+    push ebx ; Boot information
     
     call is_multiboot2 ; Check if this kernel was called by multiboot2
-    
+
     call has_cpuid
     call has_long_mode
 
@@ -81,7 +84,7 @@ no_multiboot2:
     push multiboot2_err
     call vga_write
 
-    add esp, 8
+    add esp, 4
     hlt
 
 ; CPUID & Long mode
@@ -106,7 +109,7 @@ no_long_mode:
 
     call vga_write
 
-    add esp, 8
+    add esp, 4
     hlt
 
 has_cpuid:
@@ -132,7 +135,7 @@ no_cpuid:
     push no_cpuid_err
     call vga_write
 
-    add esp, 8
+    add esp, 4
     hlt
 
 ; Page tables

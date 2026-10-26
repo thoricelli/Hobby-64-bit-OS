@@ -24,5 +24,9 @@ long_mode_main:
     mov rcx, VGA_BUFFER_SIZE / 8
     rep stosq
 
+    ; Retrieve boot information from EBX we pushed onto stack
+    mov edi, dword [rsp]
+    add rsp, 4
+
     call kernel_main
     hlt

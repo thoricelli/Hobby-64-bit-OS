@@ -1,7 +1,12 @@
 #include "hardware/vga/vga-text.hpp"
 #include "hardware/io.hpp"
 
-extern "C" void kernel_main()
+extern "C" void kernel_main(intptr_t boot_information)
+{
+    return;
+}
+
+void vga_test()
 {
     VGAText::SetColor(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 
