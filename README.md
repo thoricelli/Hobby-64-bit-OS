@@ -6,13 +6,13 @@ Yes, I'm doing what (I think) practically every low-level programmer has done be
 I'm mainly doing this because a lot of great principles programming come from OS'.  
 So, it is practically a learning exercise.
 
-The goals:
+## Goals
 - Bootable kernel.
 - Shell.
 - Simple UNIX-like applications.
 - Allow for building and running simple user applications.
-
-I can't say if I will or will not finish this, we'll see.
+- POSIX-compliant
+- x86_64 support only.
 
 ## Building
 
