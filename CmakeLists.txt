@@ -9,9 +9,11 @@ set(
     src/multiboot2/header.asm
     src/multiboot2/main.asm
     src/multiboot2/main64.asm
-
+    src/multiboot2/multiboot2_info.cpp
+    
     src/runtime/string.c
-    src/hardware/vga/vga-text.cpp
+    
+    src/drivers/vga/vga-text.cpp
     
     src/main.cpp
 )

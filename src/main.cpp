@@ -1,10 +1,5 @@
-#include "hardware/vga/vga-text.hpp"
-#include "hardware/io.hpp"
-
-extern "C" void kernel_main(intptr_t boot_information)
-{
-    return;
-}
+#include "drivers/vga/vga-text.hpp"
+#include "multiboot2/multiboot2_header.hpp"
 
 void vga_test()
 {
@@ -23,4 +18,10 @@ void vga_test()
     VGAText::SetBlink(true);
     VGAText::PutChar('_');
     VGAText::SetBlink(false);
+}
+
+extern "C" void kernel_main(void *bootInformation)
+{
+    vga_test();
+    return;
 }

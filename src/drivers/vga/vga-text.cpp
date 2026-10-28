@@ -1,4 +1,4 @@
-#include "hardware/vga/vga-text.hpp"
+#include "drivers/vga/vga-text.hpp"
 
 void VGAText::SetColor(enum vga_color fg, enum vga_color bg)
 {
