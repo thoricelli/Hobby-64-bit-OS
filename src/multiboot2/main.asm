@@ -38,7 +38,7 @@ PAGE_PRESENT equ 1 << 0
 PAGE_READ_WRITE equ 1 << 1
 PAGE_PAGE_SIZE equ 1 << 7
 
-PAGE_L2_SIZE equ 0x200000
+PAGE_L1_SIZE equ 0x1000 ; 4 KB
 
 ; MSR
 EFER equ 0xC0000080
@@ -148,14 +148,18 @@ setup_page_tables:
     or eax, PAGE_PRESENT | PAGE_READ_WRITE
     mov [l3_page_table], eax
 
+    mov eax, l1_page_table
+    or eax, PAGE_PRESENT | PAGE_READ_WRITE
+    mov [l2_page_table], eax
+
     mov ecx, 0
-
-fill_page: ; Allocates 1GB for now in page level 2.
-
-    mov eax, PAGE_L2_SIZE
+fill_page:
+    mov eax, PAGE_L1_SIZE
     mul ecx
-    or eax, PAGE_PRESENT | PAGE_READ_WRITE | PAGE_PAGE_SIZE ; 2MB per page
-    mov [l2_page_table + ecx * 8], eax
+    ; Allocate the bare minimum here, 1MB.
+    ; We handle the rest in the kernel.
+    or eax, PAGE_PRESENT | PAGE_READ_WRITE
+    mov [l1_page_table + ecx * 8], eax
 
     inc ecx
     cmp ecx, PAGE_TABLE_MAX_ENTRIES
@@ -236,6 +240,8 @@ l4_page_table:
 l3_page_table:
     resb PAGE_TABLE_SIZE_BYTES
 l2_page_table:
+    resb PAGE_TABLE_SIZE_BYTES
+l1_page_table:
     resb PAGE_TABLE_SIZE_BYTES
 align 16
 stack_bottom:
