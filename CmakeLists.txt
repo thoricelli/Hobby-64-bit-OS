@@ -8,6 +8,7 @@ set(
     SOURCES
     src/multiboot2/header.asm
     src/multiboot2/main.asm
+    src/multiboot2/main32.asm
     src/multiboot2/main64.asm
     src/multiboot2/multiboot2_info.cpp
     

@@ -4,8 +4,10 @@ bits 32
 MULTIBOOT2_CHECKSUM equ 0x36d76289
 
 ; VGA
-; 
 VGA_MEMORY equ 0xb8000
+VGA_COLS equ 80
+VGA_ROWS equ 25
+VGA_BUFFER_SIZE equ 2 * VGA_COLS * VGA_ROWS
 VGA_RED equ 0x0C
 
 ; CPUID
@@ -53,7 +55,7 @@ GDT_FLAGS_LONG_MODE equ 1 << 5
 
 global _start
 extern long_mode_main
-
+extern x32_main
 section .text
 _start:
     mov esp, stack_top ; Set up 16 KiB of stack space before going into C.
@@ -61,11 +63,18 @@ _start:
     
     call is_multiboot2 ; Check if this kernel was called by multiboot2
 
-    call has_cpuid
-    call has_long_mode
+    ; Clear VGA buffer
+    mov edi, VGA_MEMORY
+    mov eax, 0
+    mov ecx, VGA_BUFFER_SIZE / 4
+    rep stosd
 
+    ; Set up basic paging
     call setup_page_tables
     call enable_paging
+
+    call has_cpuid
+    call has_long_mode
 
     call enable_long_mode
 
@@ -96,21 +105,13 @@ has_long_mode:
     mov eax, CPUID_EXTENDED_PROCESSOR_INFO ; Check if we have Extended Processor Info, but also keep this in eax for future CPUID.
 
     cmp ecx, eax
-    jbe no_long_mode
+    jbe x32_bit_cpu
 
     cpuid ; Extended Processor Info
     test edx, EXTENDED_PROCESSOR_INFO_LM
-    jz no_long_mode
+    jz x32_bit_cpu
 
     ret
-
-no_long_mode:
-    push no_long_mode_err
-
-    call vga_write
-
-    add esp, 4
-    hlt
 
 has_cpuid:
     ; https://en.wikipedia.org/wiki/FLAGS_register#FLAGS
@@ -127,16 +128,12 @@ has_cpuid:
     pushfd
     pop eax
     xor eax, ecx
-    jz no_cpuid
+    jz x32_bit_cpu
     
     ret
 
-no_cpuid:
-    push no_cpuid_err
-    call vga_write
-
-    add esp, 4
-    hlt
+x32_bit_cpu:
+    call x32_main
 
 ; Page tables
 setup_page_tables:
@@ -215,8 +212,6 @@ vga_write:
 
 section .rodata
 multiboot2_err db "This kernel only supports GRUB multiboot 2.", 0
-no_cpuid_err db "Your CPU does not support CPUID, cannot determine if long mode is supported.", 0
-no_long_mode_err db "Your CPU does not support long mode. Are you using a 64-bit processor?", 0
 
 ; https://wiki.osdev.org/Global_Descriptor_Table
 gdt:

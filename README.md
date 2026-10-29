@@ -12,7 +12,6 @@ So, it is practically a learning exercise.
 - Simple UNIX-like applications.
 - Allow for building and running simple user applications.
 - POSIX-compliant
-- x86_64 support only.
 
 ## Building
 
@@ -20,7 +19,7 @@ Requirements
 - grub-mkrescue:  
 `sudo apt install grub-common grub-pc-bin xorriso mtools`  
 For Windows: WSL is **needed** in order to run `grub-mkrescue` and build the ISO.
-- `x86_64-elf` cross compiler inside your path.  
+- `i686-elf` cross compiler inside your path.  
 Available [here](https://github.com/lordmilko/i686-elf-tools/releases), or you can build it yourself.
 - `Make`, `CMake`, `Ninja` and `NASM`.
 
@@ -30,5 +29,5 @@ I recommend: [QEMU](https://www.qemu.org/).
 
 Running
 ```shell
-qemu-system-x86_64 -cdrom ./build/hobby_os.iso
+qemu-system-i386 -cdrom ./build/hobby_os.iso
 ```
